@@ -7,9 +7,12 @@
 <title>Login Page</title>
 </head>
 <body>
-
-	<p>
-		BP No.:&nbsp;<input type="text" id="username" name="username" value="BP Number" onclick="this.value='';">  
-	</p>
+	<form action="LoginServlet" method="POST">
+		<p>
+			BP No.:&nbsp;<input type="text" id="username" name="username" value="BP Number" onclick="this.value='';">
+			<br>
+			<input type="submit" id="submit" name="submit" value="Submit">
+		</p>
+	</form>
 </body>
 </html>
