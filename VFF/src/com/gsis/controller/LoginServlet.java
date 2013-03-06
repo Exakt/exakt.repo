@@ -38,8 +38,10 @@ public class LoginServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession();
+		session.setMaxInactiveInterval(30);
 		
 		String username = "";
+		String password = "";
 		
 		try{
 			username = request.getParameter("username");

@@ -7,12 +7,23 @@
 <title>Login</title>
 </head>
 <body>
-	<form action="LoginServlet" method="POST">
-		<p>
-			BP No.:&nbsp;<input type="text" id="username" name="username" value="BP Number" onclick="this.value='';">
-			<br>
-			<input type="submit" id="submit" name="submit" value="Submit">
-		</p>
-	</form>
+	<fieldset style="width:250px">
+		<legend >Login</legend>
+		<form action="LoginServlet" method="POST" >
+			<table border="0" align="center">
+				<tr>
+					<td>UserID:</td>
+					<td><input type="text" id="username" name="username" value="" onclick="this.value='';"></td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input type="password" id="password" name="password" value="" onclick="this.value='';"></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="right"><input type="submit" id="submit" name="submit" value="Submit"></td>
+				</tr>
+			</table>
+		</form>
+	</fieldset>
 </body>
 </html>
