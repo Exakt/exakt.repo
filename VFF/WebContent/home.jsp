@@ -2,18 +2,20 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
+<%@ page import="com.gsis.bom.Member" %>
+
 <%! 
-	String username = "";
+	Member member = null;
 %>
 
 <%
 	try{
-		username = (String)session.getAttribute("username");
+		member = (Member)session.getAttribute("member");
 	}catch(Exception e){
-		username = "";
+		
 	}
 
-	if(username.equals("")){
+	if(member == null){
 		response.sendRedirect("index.jsp");
 	}
 
@@ -25,10 +27,10 @@
 <title>Home</title>
 </head>
 <body>
-	<form action="#">
-		<p>This should expire in 30secs w/ <%=username %></p>
+	<form action="LogoutServlet" method="POST">
+		<p>This should expire in 30minutes : <%="Welcome " + member.getFirstName() + " " + member.getLastName() %></p>
 		<br>
-		<input type="submit" id="submit" name="submit" value="Submit">
+		<input type="submit" id="submit" name="submit" value="Logout">
 	</form>
 </body>
 </html>
