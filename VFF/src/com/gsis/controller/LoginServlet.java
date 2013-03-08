@@ -1,6 +1,11 @@
 package com.gsis.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,6 +43,7 @@ public class LoginServlet extends HttpServlet {
 		this.processRequest(request, response);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession();
@@ -48,17 +54,21 @@ public class LoginServlet extends HttpServlet {
 		
 		boolean result = false;
 		
+		/*
 		Integer loginFailCount;
 		
 		if((loginFailCount = (Integer)session.getAttribute("loginFailCount")) == null){
 			loginFailCount = 1;
 		}else{
 			if(loginFailCount != 3){
+				loginFailCount++;
+			}else if(loginFailCount == 3){
+				
 			}
 		}
 		
-		System.out.println(loginFailCount);
 		session.setAttribute("loginFailCount", loginFailCount);
+		*/
 		
 		Member member = null;
 		
@@ -66,16 +76,31 @@ public class LoginServlet extends HttpServlet {
 			username = request.getParameter("username");
 			password = request.getParameter("password");
 			
+			ArrayList<String> list;
+			
+			if((list = (ArrayList)session.getAttribute("userAttemptList")) == null){
+				list = new ArrayList<String>();
+				session.setAttribute("userAttemptList", list);
+			}
+			
+			list.add(username);
+			
+			Set<String> unique = new HashSet<String>(list);
+			
+			for(String key : unique){
+				if(Collections.frequency(list, key) == 3){
+					session.setAttribute("locked", "locked");
+				}
+			}
+			
 			member = new Member();
 			result = member.login(username, password);
 			
 		}catch(NullPointerException e){
 			username = "";
-			e.printStackTrace();
 		}
 		
 		if(result){
-			System.out.println(username + " is now online");
 			session.setAttribute("member", member);
 			response.sendRedirect("home.jsp");
 		}else{

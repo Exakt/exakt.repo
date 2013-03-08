@@ -27,8 +27,6 @@ public class ConnectionPoolManager {
 												sqlConfig.getProperty("password"), 
 												sqlConfig);
 			
-			System.out.println("OK");
-			
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -1,0 +1,7 @@
+
+try{
+	return "NO";
+}catch(Exception){
+}finally{
+	System.out.println("OK");
+}

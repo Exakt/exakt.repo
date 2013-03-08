@@ -27,12 +27,15 @@
 				<tr>
 					<td colspan="2" align="right"><input type="submit" id="submit" name="submit" value="Submit"></td>
 				</tr>
+				<tr>
+					<td><a href="register.jsp">Register</a></td>
+				</tr>
 			</table>
 		</form>
 	</fieldset>
-	
+	<br>
 	<%
-		if(session.getAttribute("loginFailCount") != null && (Integer)session.getAttribute("loginFailCount") >= 3){
+		if(session.getAttribute("locked") != null){
 			out.print("Account Locked!");
 		}
 	%> 
