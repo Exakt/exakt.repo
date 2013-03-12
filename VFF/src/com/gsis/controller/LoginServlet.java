@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -13,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.gsis.bom.Logger;
 import com.gsis.bom.Member;
 
 /**
@@ -51,6 +51,7 @@ public class LoginServlet extends HttpServlet {
 		
 		String username = "";
 		String password = "";
+		int bp = 0;
 		
 		boolean result = false;
 		
@@ -70,11 +71,12 @@ public class LoginServlet extends HttpServlet {
 		session.setAttribute("loginFailCount", loginFailCount);
 		*/
 		
-		Member member = null;
+		Member member = new Member();
 		
 		try{
 			username = request.getParameter("username");
 			password = request.getParameter("password");
+			bp = Integer.parseInt(username);
 			
 			ArrayList<String> list;
 			
@@ -90,19 +92,29 @@ public class LoginServlet extends HttpServlet {
 			for(String key : unique){
 				if(Collections.frequency(list, key) == 3){
 					session.setAttribute("locked", "locked");
+					Logger logger = new Logger();
+					logger.log(Logger.LOCKED_ID, bp);
+					break;
 				}
 			}
 			
-			member = new Member();
-			result = member.login(username, password);
-			
 		}catch(NullPointerException e){
 			username = "";
+		}catch(Exception e){
+			e.printStackTrace();
 		}
+
+		result = member.login(username, password);
 		
 		if(result){
-			session.setAttribute("member", member);
-			response.sendRedirect("home.jsp");
+			
+			if(!member.isLocked(bp)){
+				session.setAttribute("member", member);
+				response.sendRedirect("home.jsp");
+			}else{
+				session.setAttribute("locked", "locked");
+				response.sendRedirect("index.jsp");
+			}
 		}else{
 			response.sendRedirect("index.jsp");
 		}

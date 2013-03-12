@@ -4,15 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.gsis.dao.ConnectionPoolManager;
 
 public class Member {
-
-	public static final int LOGIN_ID = 1; 
-	public static final int LOGOUT_ID = 2; 
-	public static final int LOCKED_ID = 3; 
+	
+	final static long MILLIS_PER_DAY = 24 * 3600 * 1000;
 	
 	public static final int OK_ID = 0;
 	public static final int EXIST_ID = 1;
@@ -114,38 +118,7 @@ public class Member {
 		this.password = password;
 	}
 	
-	public static void log(int audit_id, int bp){
-		
-		String query = "INSERT INTO tblaudit(bp_id, date, audit_id) VALUES(?,?,?)";
-		
-		Connection con = null;
-		PreparedStatement pstm2 = null;
-		
-		try{
-			con = ConnectionPoolManager.getConnection();
-			pstm2 = con.prepareStatement(query);
-			pstm2.setInt(1, bp);
-			pstm2.setString(2, Calendar.getInstance().getTime().toString());
-			pstm2.setInt(3, audit_id);
-			
-			if(pstm2.executeUpdate() == 1){
-				
-				switch(audit_id){
-					case 1: System.out.println(bp + " is logged in");
-							break;
-					case 2: System.out.println(bp + " is logged off");
-							break;
-					case 3: System.out.println(bp + " is locked out");
-							break;
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			try{pstm2.close();}catch(Exception e){e.printStackTrace();}
-			try{con.close();}catch(Exception e){e.printStackTrace();}
-		}
-	}
+	
 	
 	public boolean login(String username, String password){
 		
@@ -178,7 +151,8 @@ public class Member {
 				this.lastName = rs1.getString("last_name");
 				this.password = rs1.getString("password");
 				
-				Member.log(LOGIN_ID, this.bp);
+				Logger logger = new Logger();
+				logger.log(Logger.LOGIN_ID, this.bp);
 				
 				return true;
 			}
@@ -249,5 +223,44 @@ public class Member {
 		}
 		
 		return Member.INVALID_ID;
+	}
+	
+	public boolean isLocked(int bp_no){
+		
+		try{
+			String query = "SELECT * from tblaudit where bp_id = ? and audit_id = 3 order by date desc limit 1";
+			
+			Connection con = ConnectionPoolManager.getConnection();
+			PreparedStatement pstm = con.prepareStatement(query);
+			pstm.setInt(1, bp_no);
+			ResultSet rs = pstm.executeQuery();
+			
+			if(rs.next()){
+				
+				String lastTimestampStr = rs.getString("date");
+				String currentTimestampStr = new Timestamp(Calendar.getInstance().getTimeInMillis()).toString();
+				
+				String last = lastTimestampStr.substring(0, rs.getString("date").indexOf(".")-1);
+				String current = currentTimestampStr.substring(0, currentTimestampStr.indexOf(".")-1);
+				
+				DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+				
+				DateTime lastTimestamp =  formatter.parseDateTime(last);
+				DateTime currentTimestamp =  formatter.parseDateTime(current);
+				
+				int dateDiff = Days.daysBetween(currentTimestamp, lastTimestamp).getDays();
+				
+				if(dateDiff > 0){
+					return false;
+				}
+				
+				return true;
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gsis.bom.Logger;
 import com.gsis.bom.Member;
 
 /**
@@ -37,7 +38,8 @@ public class LogoutServlet extends HttpServlet {
 	}
 	
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Member.log(Member.LOGOUT_ID, ((Member)request.getSession().getAttribute("member")).getBp());
+		Logger logger = new Logger();
+		logger.log(Logger.LOGOUT_ID, ((Member)request.getSession().getAttribute("member")).getBp());
 		request.getSession().invalidate();
 		response.sendRedirect("index.jsp");
 	}

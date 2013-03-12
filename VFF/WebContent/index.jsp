@@ -30,15 +30,14 @@
 				<tr>
 					<td><a href="register.jsp">Register</a></td>
 				</tr>
+				<%if(session.getAttribute("locked") != null){%>
+				<tr>
+					<td><%out.print("Account Locked!");%></td>
+					<td><a href="forgot.jsp">Unlock</a></td>
+				</tr>
+				<%}%> 
 			</table>
 		</form>
 	</fieldset>
-	<br>
-	<%
-		if(session.getAttribute("locked") != null){
-			out.print("Account Locked!");
-		}
-	%> 
-	
 </body>
 </html>
