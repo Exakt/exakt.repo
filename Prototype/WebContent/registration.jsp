@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="com.gsis.bom.*"%>
-<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -93,8 +93,9 @@
 					value="<%out.print(member.getLastName());%>" <%}
 			}%> /></td>
 			</tr>
-			<tr colspan=2>
+			<tr>
 				<td><input type="submit" name="register" value="Register Me!" /></td>
+				<td><input type="hidden" name="facility" value="registration"/></td>
 
 			</tr>
 		</table>

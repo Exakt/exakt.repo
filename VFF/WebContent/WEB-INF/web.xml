@@ -57,4 +57,45 @@
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/RegisterServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CheckServlet</display-name>
+    <servlet-name>CheckServlet</servlet-name>
+    <servlet-class>com.gsis.controller.CheckServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckServlet</servlet-name>
+    <url-pattern>/CheckServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RegistrationServlet</display-name>
+    <servlet-name>RegistrationServlet</servlet-name>
+    <servlet-class>com.gsis.controller.RegistrationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegistrationServlet</servlet-name>
+    <url-pattern>/RegistrationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TransactionServlet</display-name>
+    <servlet-name>TransactionServlet</servlet-name>
+    <servlet-class>com.gsis.controller.TransactionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TransactionServlet</servlet-name>
+    <url-pattern>/TransactionServlet</url-pattern>
+  </servlet-mapping>
+<servlet>
+<servlet-name>SimpleCaptcha</servlet-name>
+<servlet-class>nl.captcha.servlet.SimpleCaptchaServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>SimpleCaptcha</servlet-name>
+<url-pattern>/simpleCaptcha.jpg</url-pattern>
+</servlet-mapping>
+<welcome-file-list>
+<welcome-file>simpleCaptcha.jsp</welcome-file>
+</welcome-file-list>
 </web-app>

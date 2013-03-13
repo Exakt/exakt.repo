@@ -17,9 +17,9 @@ public class Member {
 	String sql;
 	Statement stm;
 	
-	private String bpNumber;
-	private String firstName;
-	private String lastName;
+	private String bpNo;
+	private String first_name;
+	private String last_name;
 	private String email;
 	private String address;
 	private String question1;
@@ -34,22 +34,22 @@ public class Member {
 		questions = new Questions();
 	}
 	public String getBpNumber() {
-		return bpNumber;
+		return bpNo;
 	}
-	public void setBpNumber(String bpNumber) {
-		this.bpNumber = bpNumber;
+	public void setBpNumber(String bpNo) {
+		this.bpNo = bpNo;
 	}
 	public String getFirstName() {
-		return firstName;
+		return first_name;
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirstName(String first_name) {
+		this.first_name = first_name;
 	}
 	public String getLastName() {
-		return lastName;
+		return last_name;
 	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLastName(String last_name) {
+		this.last_name = last_name;
 	}
 	
 	public String getEmail() {
@@ -95,17 +95,17 @@ public class Member {
 	public void setQuestions(Questions questions) {
 		this.questions = questions;
 	}
-	public boolean checkMemberExist(String bpNumber, String fname, String lname){
+	public boolean checkMemberExist(String bpNo, String fname, String lname){
 		try{
 
 			Connection con = ConnectionPoolManager.getConnection();
 			//con = dbc.getConnection();
 
-			String query = "SELECT * from tblmember where bpNumber = ? and firstname = ? and lastname = ?";
+			String query = "SELECT * from tblmember where bpNo = ? and first_name = ? and last_name = ?";
 
 			pstm = con.prepareStatement(query);
 
-			pstm.setString(1, bpNumber);
+			pstm.setString(1, bpNo);
 			pstm.setString(2, fname);
 			pstm.setString(3, lname);
 
@@ -113,9 +113,9 @@ public class Member {
 			rs = pstm.executeQuery();
 
 			if(rs.next()){
-				this.setBpNumber(rs.getString("bpNumber"));
-				this.setFirstName(rs.getString("firstname"));
-				this.setLastName(rs.getString("lastname"));
+				this.setBpNumber(rs.getString("bpNo"));
+				this.setFirstName(rs.getString("first_name"));
+				this.setLastName(rs.getString("last_name"));
 				this.setEmail(rs.getString("emailAddress"));
 				this.setAddress(rs.getString("address"));
 
@@ -136,24 +136,24 @@ public class Member {
 		}
 	}
 	
-	public boolean checkMemberRegistration(String bpNumber){
+	public boolean checkMemberRegistration(String bpNo){
 		try{
 
 			Connection con = ConnectionPoolManager.getConnection();
 			//con = dbc.getConnection();
 
-			String query = "SELECT * from tblregistered where bpNumber = ?";
+			String query = "SELECT * from tblregistered where bpNo = ?";
 
 			pstm = con.prepareStatement(query);
 
-			pstm.setString(1, bpNumber);
+			pstm.setString(1, bpNo);
 
 
 			rs = pstm.executeQuery();
 
 			if(rs.next()){
-				this.setBpNumber(rs.getString("bpNumber"));
-				this.setFirstName(rs.getString("firstname"));
+				this.setBpNumber(rs.getString("bpNo"));
+				this.setFirstName(rs.getString("first_name"));
 				this.setLastName(rs.getString("lastname"));
 				this.setEmail(rs.getString("emailAddress"));
 				this.setAddress(rs.getString("address"));
@@ -183,7 +183,7 @@ public class Member {
 				System.out.println("closed");
 			}
 			
-			sql = "INSERT INTO tblregistered(bpNumber, firstname, lastname, emailAddress, address, question1, answer1, question2, answer2) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			sql = "INSERT INTO tblregistered(bpNo, first_name, last_name, emailAddress, address, question1, answer1, question2, answer2) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			pstm = con.prepareStatement(sql);
 
@@ -223,25 +223,25 @@ public class Member {
 		}
 	}
 
-	public boolean getMember(String bpNumber){
+	public boolean getMember(String bpNo){
 		try{
 
 			Connection con = ConnectionPoolManager.getConnection();
 			//con = dbc.getConnection();
 
-			String query = "SELECT * from tblmember where bpNumber = ?";
+			String query = "SELECT * from tblmember where bpNo = ?";
 
 			pstm = con.prepareStatement(query);
 
-			pstm.setString(1, bpNumber);
+			pstm.setString(1, bpNo);
 
 
 			rs = pstm.executeQuery();
 
 			if(rs.next()){
-				this.setBpNumber(rs.getString("bpNumber"));
-				this.setFirstName(rs.getString("firstname"));
-				this.setLastName(rs.getString("lastname"));
+				this.setBpNumber(rs.getString("bpNo"));
+				this.setFirstName(rs.getString("first_name"));
+				this.setLastName(rs.getString("last_name"));
 				this.setEmail(rs.getString("emailAddress"));
 				this.setAddress(rs.getString("address"));
 
@@ -250,7 +250,7 @@ public class Member {
 
 			return false;
 		}catch(Exception ex){
-			System.out.println(ex.getMessage()+ "checkMemberError");
+			System.out.println(ex.getMessage()+ "getMemberError");
 			return false;
 		}finally{
 			try{
