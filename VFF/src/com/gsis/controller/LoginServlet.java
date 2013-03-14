@@ -109,6 +109,10 @@ public class LoginServlet extends HttpServlet {
 		if(result){
 			
 			if(!member.isLocked(bp)){
+				
+				Logger logger = new Logger();
+				logger.log(Logger.LOGIN_ID, bp);
+				
 				session.setAttribute("member", member);
 				response.sendRedirect("home.jsp");
 			}else{

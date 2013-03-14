@@ -15,8 +15,7 @@
 </head>
 <body>
 	<form action="RegisterServlet" method="POST">
-		<p>Fill up the following:</p>
-		<br>
+		<h3>Fill up the following:</h3>
 		<table> 
 			<tr>
 				<td>BP Number:</td>
@@ -31,26 +30,22 @@
 				<td><input type="text" id="last" name="last"></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="submit" id="submit" name="submit" value="Submit"></td>
+				<td colspan="2" align="right"><input type="submit" id="submit" name="submit" value="Submit"></td>
 			</tr>
 		</table>
 	</form>
-	
 	<%
 		if(result == 1){
-			%>
-				out.print("Account Already Exists!");
-			<%
+			out.print("Already Exists!");
 		}else if(result == 2){
-			%>
-				out.print("Invalid BP Number!");
-			<%
+			out.print("BP Number and Name does not match!");
+		}else if(result == 3){
+			out.print("Invalid E-mail Address!");
 		}else{
 			%>
-				<%@ page  = "confirmation.jsp" %>
+				<jsp:include page="confirmation.jsp" />
 			<%	
 		}
 	%>
-	
 </body>
 </html>

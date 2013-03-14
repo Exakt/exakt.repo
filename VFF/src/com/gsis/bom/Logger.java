@@ -59,9 +59,9 @@ public class Logger {
 			if(pstm2.executeUpdate() == 1){
 				
 				switch(audit_id){
-					case 1: System.out.println(bp + " is logged in");
+					case 1: System.out.println(bp + " logged in");
 							break;
-					case 2: System.out.println(bp + " is logged off");
+					case 2: System.out.println(bp + " logged off");
 							break;
 					case 3: System.out.println(bp + " is locked out");
 							break;

@@ -17,27 +17,25 @@
 		<form action="LoginServlet" method="POST" >
 			<table border="0" align="center">
 				<tr>
-					<td>UserID:</td>
-					<td><input type="text" id="username" name="username"></td>
+					<td width="20%">UserID:</td>
+					<td align="right"><input type="text" id="username" name="username"></td>
 				</tr>
 				<tr>
-					<td>Password:</td>
-					<td><input type="password" id="password" name="password"></td>
+					<td width="20%">Password:</td>
+					<td align="right"><input type="password" id="password" name="password"></td>
 				</tr>
 				<tr>
 					<td colspan="2" align="right"><input type="submit" id="submit" name="submit" value="Submit"></td>
 				</tr>
-				<tr>
-					<td><a href="register.jsp">Register</a></td>
-				</tr>
-				<%if(session.getAttribute("locked") != null){%>
-				<tr>
-					<td><%out.print("Account Locked!");%></td>
-					<td><a href="forgot.jsp">Unlock</a></td>
-				</tr>
-				<%}%> 
 			</table>
 		</form>
 	</fieldset>
+	<br>
+	<a href="register.jsp">Register</a>
+	<br>
+	<%if(session.getAttribute("locked") != null){%>
+		<%out.print("Account Locked!");%>
+		<a href="forgot.jsp">Unlock</a>
+	<%}%> 
 </body>
 </html>
