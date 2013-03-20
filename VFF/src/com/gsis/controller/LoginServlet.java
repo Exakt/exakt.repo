@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.gsis.bom.Logger;
-import com.gsis.bom.Member;
+import com.gsis.bom.MemberBean;
+import com.gsis.bom.Security;
 
 /**
  * Servlet implementation class LoginServlet
@@ -71,11 +72,11 @@ public class LoginServlet extends HttpServlet {
 		session.setAttribute("loginFailCount", loginFailCount);
 		*/
 		
-		Member member = new Member();
+		MemberBean member = new MemberBean();
 		
 		try{
 			username = request.getParameter("username");
-			password = request.getParameter("password");
+			password = Security.getMD5Hash(request.getParameter("password"));
 			bp = Integer.parseInt(username);
 			
 			ArrayList<String> list;

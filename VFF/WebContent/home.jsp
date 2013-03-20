@@ -2,15 +2,13 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<%@ page import="com.gsis.bom.Member" %>
+<%@ page import="com.gsis.bom.MemberBean" %>
 
-<%! 
-	Member member = null;
-%>
+<%!MemberBean member = null;%>
 
 <%
 	try{
-		member = (Member)session.getAttribute("member");
+		member = (MemberBean)session.getAttribute("member");
 	}catch(Exception e){
 		
 	}
@@ -18,7 +16,6 @@
 	if(member == null){
 		response.sendRedirect("index.jsp");
 	}
-
 %>
 
 <html>

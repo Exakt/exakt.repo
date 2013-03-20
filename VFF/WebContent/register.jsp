@@ -1,9 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%!int result = 4; %>
+<%@ page import="com.gsis.bom.MemberBean" %>
+<%!int result = 4;
+	MemberBean member = null;%>
 <%
 	if(request.getParameter("result") != null){
 		result = Integer.parseInt(request.getParameter("result"));		
+	}
+	
+	try{
+		member = (MemberBean)session.getAttribute("member");
+	}catch(Exception e){
+		e.printStackTrace();
 	}
 %>    
     
@@ -42,6 +50,7 @@
 		}else if(result == 3){
 			out.print("Invalid E-mail Address!");
 		}else{
+			if(member != null)
 			%>
 				<jsp:include page="confirmation.jsp" />
 			<%	

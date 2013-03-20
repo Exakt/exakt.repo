@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gsis.bom.Member;
+import com.gsis.bom.MemberBean;
 
 /**
  * Servlet implementation class RegisterServlet
@@ -42,20 +42,18 @@ public class RegisterServlet extends HttpServlet {
 		String firstName = request.getParameter("first");
 		String lastName = request.getParameter("last");
 		
-		Member member = new Member();
+		MemberBean member = new MemberBean();
 		int flag = member.register(bp, firstName, lastName);
 		
-		System.out.println(flag);
-		
 		switch(flag){
-			case Member.EXIST_ID	: 	response.sendRedirect("register.jsp?result="+Member.EXIST_ID);
+			case MemberBean.EXIST_ID	: 	response.sendRedirect("register.jsp?result="+MemberBean.EXIST_ID);
 										break;
-			case Member.INVALID_EMAIL:	response.sendRedirect("register.jsp?result="+Member.INVALID_EMAIL);
+			case MemberBean.INVALID_EMAIL:	response.sendRedirect("register.jsp?result="+MemberBean.INVALID_EMAIL);
 										break;
-			case Member.OK_ID		:	request.getSession().setAttribute("member", member);
-										response.sendRedirect("confirmation.jsp");
+			case MemberBean.OK_ID		:	request.getSession().setAttribute("member", member);
+										response.sendRedirect("register.jsp");
 										break;
-			default					:	response.sendRedirect("register.jsp?result="+Member.INVALID_ID);
+			default					:	response.sendRedirect("register.jsp?result="+MemberBean.INVALID_ID);
 										break;
 		}
 	}

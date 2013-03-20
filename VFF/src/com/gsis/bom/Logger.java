@@ -44,7 +44,7 @@ public class Logger {
 	
 	public void log(int audit_id, int bp){
 		
-		String query = "INSERT INTO tblaudit(bp_id, date, audit_id) VALUES(?,?,?)";
+		String query = "INSERT INTO tblaudit(bp_no, date, audit_id) VALUES(?,?,?)";
 		
 		Connection con = null;
 		PreparedStatement pstm2 = null;

@@ -14,7 +14,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.gsis.dao.ConnectionPoolManager;
 
-public class Member {
+public class MemberBean {
 
 	final static long MILLIS_PER_DAY = 24 * 3600 * 1000;
 
@@ -34,8 +34,12 @@ public class Member {
 	private String firstName;
 	private String lastName;
 	private String password;
+	private String questionA;
+	private String questionB;
+	private String answerA;
+	private String answerB;
 
-	public Member(){
+	public MemberBean(){
 
 	}
 
@@ -119,6 +123,38 @@ public class Member {
 		this.password = password;
 	}
 
+	public String getQuestionA() {
+		return questionA;
+	}
+
+	public void setQuestionA(String questionA) {
+		this.questionA = questionA;
+	}
+
+	public String getQuestionB() {
+		return questionB;
+	}
+
+	public void setQuestionB(String questionB) {
+		this.questionB = questionB;
+	}
+
+	public String getAnswerA() {
+		return answerA;
+	}
+
+	public void setAnswerA(String answerA) {
+		this.answerA = answerA;
+	}
+
+	public String getAnswerB() {
+		return answerB;
+	}
+
+	public void setAnswerB(String answerB) {
+		this.answerB = answerB;
+	}
+	
 	public boolean login(String username, String password){
 
 		String query = "SELECT * from tblregistered where bp_no = ? and password = ?";
@@ -181,7 +217,7 @@ public class Member {
 			pstm1.setInt(1, bp);
 
 			if(pstm1.executeQuery().next()){
-				return Member.EXIST_ID;
+				return MemberBean.EXIST_ID;
 			}
 
 			query = "SELECT * from tblmember where bp_no = ? and first_name = ? and last_name = ?";
@@ -206,10 +242,10 @@ public class Member {
 				this.lastName = rs.getString("last_name");
 				
 				if(!Email.isValidEmailAddress(email)){
-					return Member.INVALID_EMAIL;
+					return MemberBean.INVALID_EMAIL;
 				}
 				
-				return Member.OK_ID;
+				return MemberBean.OK_ID;
 			}
 
 		}catch(Exception e){
@@ -221,18 +257,22 @@ public class Member {
 			try{con.close();}catch(Exception e){e.printStackTrace();}
 		}
 
-		return Member.INVALID_ID;
+		return MemberBean.INVALID_ID;
 	}
 
 	public boolean isLocked(int bp_no){
-
+		
+		Connection con = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		
 		try{
 			String query = "SELECT * from tblaudit where bp_no = ? and audit_id = 3 order by date desc limit 1";
 
-			Connection con = ConnectionPoolManager.getConnection();
-			PreparedStatement pstm = con.prepareStatement(query);
+			con = ConnectionPoolManager.getConnection();
+			pstm = con.prepareStatement(query);
 			pstm.setInt(1, bp_no);
-			ResultSet rs = pstm.executeQuery();
+			rs = pstm.executeQuery();
 
 			if(rs.next()){
 
@@ -258,8 +298,55 @@ public class Member {
 
 		}catch(Exception e){
 			e.printStackTrace();
+		}finally{
+			try{rs.close();}catch(Exception e){e.printStackTrace();}
+			try{pstm.close();}catch(Exception e){e.printStackTrace();}
+			try{con.close();}catch(Exception e){e.printStackTrace();}
 		}
 
 		return false;
+	}
+
+	@SuppressWarnings("finally")
+	public boolean insert(){
+		
+		Connection con = null;
+		PreparedStatement pstm = null;
+		
+		boolean result = false;
+		
+		String query = "INSERT into tblregistered(bp_no, id_no, crn_no, birthdate, place, email, contact_no, first_name, " +
+						"last_name, password, question_1, question_2, answer_1, answer_2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try{
+			con = ConnectionPoolManager.getConnection();
+			pstm = con.prepareStatement(query);
+			
+			this.password = Security.getRandomPassword();
+			System.out.println(password);
+			this.password = Security.getMD5Hash(password);
+			
+			pstm.setInt(1, this.bp);
+			pstm.setInt(2, this.id);
+			pstm.setInt(3, this.crn);
+			pstm.setString(4, this.birthdate);
+			pstm.setString(5, this.place);
+			pstm.setString(6, this.email);
+			pstm.setString(7, this.contactNo);
+			pstm.setString(8, this.firstName);
+			pstm.setString(9, this.lastName);
+			pstm.setString(10, this.password);
+			pstm.setString(11, this.questionA);
+			pstm.setString(12, this.questionB);
+			pstm.setString(13, this.answerA);
+			pstm.setString(14, this.answerB);
+			
+			result = (pstm.executeUpdate() == 1) ? true : false;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			return result;
+		}
 	}
 }
