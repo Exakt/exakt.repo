@@ -22,7 +22,7 @@ public class MemberBean {
 	public static final int EXIST_ID = 1;
 	public static final int INVALID_ID = 2;
 	public static final int INVALID_EMAIL = 3;
-
+	
 	private int bp;
 	private int id;
 	private int crn;
@@ -256,7 +256,7 @@ public class MemberBean {
 			try{pstm2.close();}catch(Exception e){e.printStackTrace();}
 			try{con.close();}catch(Exception e){e.printStackTrace();}
 		}
-
+		
 		return MemberBean.INVALID_ID;
 	}
 

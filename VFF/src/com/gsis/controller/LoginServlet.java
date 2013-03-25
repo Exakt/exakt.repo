@@ -27,7 +27,6 @@ public class LoginServlet extends HttpServlet {
      */
     public LoginServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -79,49 +78,54 @@ public class LoginServlet extends HttpServlet {
 			password = Security.getMD5Hash(request.getParameter("password"));
 			bp = Integer.parseInt(username);
 			
-			ArrayList<String> list;
+			result = member.login(username, password);
 			
-			if((list = (ArrayList)session.getAttribute("userAttemptList")) == null){
-				list = new ArrayList<String>();
-				session.setAttribute("userAttemptList", list);
-			}
-			
-			list.add(username);
-			
-			Set<String> unique = new HashSet<String>(list);
-			
-			for(String key : unique){
-				if(Collections.frequency(list, key) == 3){
-					session.setAttribute("locked", "locked");
+			if(result){
+				
+				if(!member.isLocked(bp)){
+					
 					Logger logger = new Logger();
-					logger.log(Logger.LOCKED_ID, bp);
-					break;
+					logger.log(Logger.LOGIN_ID, bp);
+					
+					session.setAttribute("member", member);
+					response.sendRedirect("home.jsp");
+					
+				}else{
+					
+					session.setAttribute("locked", "locked");
+					response.sendRedirect("index.jsp");
+					
 				}
+				
+			}else{
+				
+				ArrayList<String> list;
+				
+				if((list = (ArrayList)session.getAttribute("userAttemptList")) == null){
+					list = new ArrayList<String>();
+					session.setAttribute("userAttemptList", list);
+				}
+				
+				list.add(username);
+				
+				Set<String> unique = new HashSet<String>(list);
+				
+				for(String key : unique){
+					if(Collections.frequency(list, key) == 3){
+						session.setAttribute("locked", "locked");
+						Logger logger = new Logger();
+						logger.log(Logger.LOCKED_ID, bp);
+						break;
+					}
+				}
+				
+				response.sendRedirect("index.jsp");
 			}
 			
 		}catch(NullPointerException e){
 			username = "";
 		}catch(Exception e){
 			e.printStackTrace();
-		}
-
-		result = member.login(username, password);
-		
-		if(result){
-			
-			if(!member.isLocked(bp)){
-				
-				Logger logger = new Logger();
-				logger.log(Logger.LOGIN_ID, bp);
-				
-				session.setAttribute("member", member);
-				response.sendRedirect("home.jsp");
-			}else{
-				session.setAttribute("locked", "locked");
-				response.sendRedirect("index.jsp");
-			}
-		}else{
-			response.sendRedirect("index.jsp");
 		}
 	}
 }
